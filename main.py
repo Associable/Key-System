@@ -134,5 +134,5 @@ async def redeem_command(interaction: discord.Interaction, key: str):
         await interaction.response.send_message(embed=em)
 
 
-
-client.run("MTA4NjA3MzQ1MzI3MjEwOTA1Nw.GO6yvO.vq38h3rimXVkUMXLbi3rrm_DTLIe-xqMSbVj-M")
+#Replace the emptiness with your discord bot token in between the ""
+client.run("")
