@@ -1,11 +1,37 @@
-from tinydb import TinyDB, Query
+import os
+
+def install_required_packages():
+    required_packages = ["discord", "tinydb"]
+    for package in required_packages:
+        try:
+            __import__(package)
+        except ImportError:
+            os.system(f"pip install {package}")
+
+# Check if required packages are installed
+packages_installed = True
+required_packages = ["discord", "tinydb"]
+for package in required_packages:
+    try:
+        __import__(package)
+    except ImportError:
+        packages_installed = False
+        break
+
+if not packages_installed:
+    user_input = input("Do you want to install required packages? (Y/N): ")
+    if user_input.lower() == "y":
+        install_required_packages()
+    else:
+        exit(3)
+
 import string
 import random
 import discord
 from discord import app_commands
-import os
+from tinydb import TinyDB, Query
 
-class aclient(discord.Client):
+class AClient(discord.Client):
     def __init__(self):
         super().__init__(intents=discord.Intents.all())
         self.synced = False
@@ -26,7 +52,7 @@ class aclient(discord.Client):
             print("----------------------")
 
 
-client = aclient()
+client = AClient()
 tree = app_commands.CommandTree(client)
 
 db = TinyDB('db.json')
@@ -43,7 +69,7 @@ async def get_user_info(user_id):
 async def selff(interaction: discord.Interaction, duration: int):
     # gen the key
     generation = string.ascii_letters + string.digits + string.punctuation
-    key = "paid-" + ''.join(random.choice(generation) for i in range(16))
+    key = ''.join(random.choice(generation) for _ in range(16))
 
     # get username
     user = None
@@ -52,13 +78,13 @@ async def selff(interaction: discord.Interaction, duration: int):
     post = {'key': key, "user": user,"ip": None, 'hwid': None, 'duration': duration, 'used': False}
     db.insert(post)
 
-    # make a embed to send in discord
+    # make an embed to send in discord
     em = discord.Embed(color=0x0FFF00)
     em.add_field(name="✅ Successfully Generated Key!", value=f'Key: {key}\nExpires: in {duration} days')
     await interaction.response.send_message(embed=em)
 
 # Redeem
-@tree.command(name='redeem', description='redeem your key')
+@tree.command(name='redeem', description='Redeem your key')
 async def self(interaction: discord.Interaction, key: str):
     user = ''
     valid = False
@@ -92,3 +118,5 @@ async def self(interaction: discord.Interaction, key: str):
     elif valid == False:
         em = discord.Embed(title='Invalid Key', color=0xff2525)
         await interaction.response.send_message(embed=em)
+
+client.run("YOUR_BOT_TOKEN")
