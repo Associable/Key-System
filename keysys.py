@@ -42,8 +42,8 @@ async def get_user_info(user_id):
 @app_commands.checks.has_any_role("Admin", "Owner")
 async def selff(interaction: discord.Interaction, duration: int):
     # gen the key
-    letters = string.ascii_lowercase
-    key = "paid-" + ''.join(random.choice(letters) for i in range(10))
+    generation = string.ascii_letters + string.digits + string.punctuation
+    key = "paid-" + ''.join(random.choice(generation) for i in range(16))
 
     # get username
     user = None
