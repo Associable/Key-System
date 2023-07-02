@@ -60,7 +60,6 @@ class AClient(discord.Client):
             await client.change_presence(status=discord.Status.idle, activity=discord.Game("Playboi Carti")) # change this to whatever you want
             print("------Information------\nLogged in as:\nName: {}. \nID: {}. \nCredits to lunar\n----------------------".format(client.user, client.user.id))
 
-
 client = AClient()
 tree = app_commands.CommandTree(client)
 
@@ -76,21 +75,49 @@ async def get_user_info(user_id):
 @tree.command(name='gen_key', description='Generates a key (duration is in days)') #guild specific slash command
 @app_commands.checks.has_any_role("Creator")
 async def selff(interaction: discord.Interaction, duration: int):
-    # gen the key
-    generation = string.ascii_letters + string.digits + string.punctuation
-    key = "paid-" + ''.join(random.choice(generation) for _ in range(16))
+    # Define the characters for key generation
+    letters = string.ascii_letters  # Uppercase and lowercase letters
+    digits = string.digits  # Digits (0-9)
+    symbols = string.punctuation.replace("-", "")  # Special characters excluding "-"
 
-    # get username
-    user = None
-    
-    # send all info to the database
-    post = {'key': key, "user": user,"ip": None, 'hwid': None, 'duration': duration, 'used': False}
-    db.insert(post)
+    # Generate the key with a combination of characters
+    key = ''.join(random.choice(letters + digits + symbols) for _ in range(15))
 
-    # make an embed to send in discord
+    # Add a "-" character in the key at a random position
+    key = key[:8] + "-" + key[8:]
+
+    # Send the generated key in a response
     em = discord.Embed(color=0x0FFF00)
     em.add_field(name="✅ Successfully Generated Key!", value=f'Key: {key}\nExpires: in {duration} days')
     await interaction.response.send_message(embed=em)
+
+@tree.command(name='whitelist', description='real') #guild specific slash command
+@app_commands.checks.has_any_role("Creator")
+async def selff(interaction: discord.Interaction, user: discord.User, duration: int):
+    # Define the characters for key generation
+    letters = string.ascii_letters  # Uppercase and lowercase letters
+    digits = string.digits  # Digits (0-9)
+    symbols = string.punctuation.replace("-", "")  # Special characters excluding "-"
+
+    # Generate the key with a combination of characters
+    key = ''.join(random.choice(letters + digits + symbols) for _ in range(15))
+
+    # Add a "-" character in the key at a random position
+    key = key[:8] + "-" + key[8:]
+
+    # Create an embed for the generated key
+    embed = discord.Embed(title="Key Generation", color=0x00FF00)
+    embed.add_field(name="✅ Successfully Generated Key!", value=f"Key: ```{key}```\nExpires in **{duration}** days")
+
+    # Add the username to the key in the database
+    db.insert({'key': key, 'user': user.name, 'duration': duration, 'redeemed': False, 'active': True})
+
+    # Send the embed in a direct message to the specified user
+    await user.send(embed=embed)
+
+    # Defer the response and send a message in the channel where the command was used
+    await interaction.response.defer()
+    await interaction.followup.send(f"✅ Successfully Generated Key!\nThe key has been sent to {user.mention}.")
 
 # Redeem
 @tree.command(name='redeem', description='Redeem your key')
@@ -127,6 +154,25 @@ async def redeem_command(interaction: discord.Interaction, key: str):
     else:
         em = discord.Embed(title='Invalid Key', color=0xff2525)
         await interaction.response.send_message(embed=em)
+
+@tree.command(name='key', description='Sends you your key')
+async def christina(interaction: discord.Interaction):
+    user = interaction.user  # Get the user who invoked the command
+    query = Query()  # Create a Query instance
+
+    # Check if the user has an active key in the database
+    check = db.search((query.user == user.name) & (query.active == True))
+
+    if check:
+        key = check[0]['key']  # Get the key from the database
+        embed = discord.Embed(title="Key Redemption", description=f"Success! Here is your key: ```{key}```", color=0x00FF00)
+        await user.send(embed=embed)
+        await interaction.response.send_message(content="Done! Check your DMs!")
+    else:
+        embed = discord.Embed(title="Key Redemption", description="Unsuccessful, unfortunately you do not have a key with us.", color=0xFF0000)
+        await interaction.response.send_message(embed=embed)
+
+
 
 
 
