@@ -1,4 +1,7 @@
 import os
+import sys
+from colorama import init, Fore
+from time import sleep
 
 def install_required_packages():
     required_packages = ["discord", "tinydb"]
@@ -18,13 +21,24 @@ for package in required_packages:
         packages_installed = False
         break
 
-if not packages_installed:
+# Print status message and handle package installation
+if packages_installed:
+    print(Fore.GREEN + "All required packages installed, loading!" + Fore.RESET)
+else:
     user_input = input("Do you want to install required packages? (Y/N): ")
     if user_input.lower() == "y":
         install_required_packages()
     else:
-        exit(3)
+        print(Fore.RED + "Some required packages are missing. Please install them manually." + Fore.RESET)
+        sys.exit(3)
 
+# Wait for a few seconds
+sleep(3)
+
+# Clear the console
+os.system("cls")
+
+# Continue with the rest of the code
 import string
 import random
 import discord
@@ -65,11 +79,11 @@ async def get_user_info(user_id):
     return None
 
 @tree.command(name='gen_key', description='Generates a key (duration is in days)') #guild specific slash command
-@app_commands.checks.has_any_role("Admin", "Owner")
+@app_commands.checks.has_any_role("Creator")
 async def selff(interaction: discord.Interaction, duration: int):
     # gen the key
     generation = string.ascii_letters + string.digits + string.punctuation
-    key = ''.join(random.choice(generation) for _ in range(16))
+    key = "paid-" + ''.join(random.choice(generation) for _ in range(16))
 
     # get username
     user = None
@@ -85,38 +99,40 @@ async def selff(interaction: discord.Interaction, duration: int):
 
 # Redeem
 @tree.command(name='redeem', description='Redeem your key')
-async def self(interaction: discord.Interaction, key: str):
-    user = ''
+async def redeem_command(interaction: discord.Interaction, key: str):
+    user_query = Query()
     valid = False
     try:
-        check = db.search(user.key == key)
+        check = db.search(user_query['key'] == key)
         for check in check:
-            if check['key'] == str(key):
+            if check['key'] == key:
                 valid = True
+                break
     except:
         pass
     
-    check = db.search(user.key == key)
+    check = db.search(user_query['key'] == key)
     for check in check:
-        if check['key'] == str(key):
+        if check['key'] == key:
             check_user = check['user']
-            if check_user != None:
+            if check_user is not None:
                 em = discord.Embed(title='Key has already been redeemed.', color=0xff0000)
                 await interaction.response.send_message(embed=em)
-                return 0
-    if valid == True:
+                return
+    if valid:
         user_info = await get_user_info(interaction.user.id)
         if user_info:
-            user = user_info['name']
+            username = user_info['name']
         else:
-            user = interaction.user.display_name
-        db.update({'user': user, 'used': True}, user.key == key)
+            username = interaction.user.display_name
+        db.update({'user': username, 'used': True}, user_query['key'] == key)
         em = discord.Embed(color=0x2525ff)
-        em.add_field(name=f'Key Redeemed!', value=f'{user} has been assigned to {key}')
+        em.add_field(name='Key Redeemed!', value=f'{username} has been assigned to {key}')
         await interaction.response.send_message(embed=em)
-        return 0
-    elif valid == False:
+    else:
         em = discord.Embed(title='Invalid Key', color=0xff2525)
         await interaction.response.send_message(embed=em)
 
-client.run("YOUR_BOT_TOKEN")
+
+
+client.run("MTA4NjA3MzQ1MzI3MjEwOTA1Nw.GO6yvO.vq38h3rimXVkUMXLbi3rrm_DTLIe-xqMSbVj-M")
