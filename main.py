@@ -58,12 +58,7 @@ class AClient(discord.Client):
             os.system("cls")
             await client.wait_until_ready()
             await client.change_presence(status=discord.Status.idle, activity=discord.Game("Playboi Carti")) # change this to whatever you want
-            print("------Information------")
-            print(f"Logged in as:")
-            print(f"Name: {client.user}.")
-            print(f"ID: {client.user.id}.")
-            print("Credits to lunar")
-            print("----------------------")
+            print("------Information------\nLogged in as:\nName: {}. \nID: {}. \nCredits to lunar\n----------------------".format(client.user, client.user.id))
 
 
 client = AClient()
@@ -134,5 +129,5 @@ async def redeem_command(interaction: discord.Interaction, key: str):
         await interaction.response.send_message(embed=em)
 
 
-#Replace the emptiness with your discord bot token in between the ""
+
 client.run("")
