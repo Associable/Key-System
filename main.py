@@ -81,10 +81,13 @@ async def selff(interaction: discord.Interaction, duration: int):
     symbols = string.punctuation.replace("-", "")  # Special characters excluding "-"
 
     # Generate the key with a combination of characters
-    key = ''.join(random.choice(letters + digits + symbols) for _ in range(15))
+    key = ''.join(random.choice(letters + digits + symbols) for _ in range(36))
 
     # Add a "-" character in the key at a random position
     key = key[:8] + "-" + key[8:]
+
+    # Add the key into the database
+    db.insert({'key': key, 'user': interaction.user.name, 'duration': duration, 'redeemed': False, 'active': True})
 
     # Send the generated key in a response
     em = discord.Embed(color=0x0FFF00)
