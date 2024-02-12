@@ -166,4 +166,4 @@ async def unwhitelist_command(interaction: discord.Interaction, user: discord.Us
     await interaction.response.send_message(embed=em)
 
 
-client.run("MTE5MzkzOTIzMDIwOTA4OTU0Ng.GNPQ44.DnQuAVaJFQTPfKRQRh1ZNkhWuSwapvGUR29xd0")
+client.run("")
