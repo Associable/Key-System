@@ -74,4 +74,4 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE.md) fi
 
 ## 📫 Contact
 
-For any questions or issues, please reach out to [Your Email](mailto:lunaringsgg@gmail.com).
+For any questions or issues, please reach out to [Click Here to Email Me!](mailto:lunaringsgg@gmail.com).
