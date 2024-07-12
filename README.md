@@ -27,7 +27,7 @@ Welcome to the Python Key Generation & Redemption System! This robust system all
 
 To install the required packages, run:
 
-    ```pip install discord pymongo colorama```
+    pip install discord pymongo colorama
 
 ## 📄 License
 
