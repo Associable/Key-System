@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1 class="mb-4">Keys</h1>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Key</th>
+            <th>User</th>
+            <th>Duration</th>
+            <th>HWID</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for key in keys %}
+        <tr>
+            <td>{{ key.key }}</td>
+            <td>{{ key.user }}</td>
+            <td>{{ key.duration }}</td>
+            <td>{{ key.hwid }}</td>
+            <td>
+                <a href="{{ url_for('edit_key', key_id=key._id) }}" class="btn btn-warning btn-sm">Edit</a>
+                <form action="{{ url_for('delete_key', key_id=key._id) }}" method="post" style="display:inline-block;">
+                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

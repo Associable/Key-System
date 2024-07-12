@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Key Management Panel</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link id="theme-style" rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body.light-mode {
+            background-color: #f8f9fa;
+            color: #212529;
+        }
+        body.dark-mode {
+            background-color: #343a40;
+            color: #fff;
+        }
+        .navbar-light-mode {
+            background-color: #f8f9fa;
+        }
+        .navbar-dark-mode {
+            background-color: #343a40;
+        }
+        .navbar-dark-mode .navbar-brand,
+        .navbar-dark-mode .nav-link {
+            color: #fff;
+        }
+        .table-light-mode {
+            background-color: #fff;
+            color: #212529;
+        }
+        .table-dark-mode {
+            background-color: #343a40;
+            color: #fff;
+        }
+        .table-dark-mode th,
+        .table-dark-mode td,
+        .table-dark-mode thead th {
+            border-color: #454d55;
+        }
+        .modal-content.light-mode {
+            background-color: #fff;
+            color: #212529;
+        }
+        .modal-content.dark-mode {
+            background-color: #343a40;
+            color: #fff;
+        }
+        .form-control.light-mode {
+            background-color: #fff;
+            color: #212529;
+        }
+        .form-control.dark-mode {
+            background-color: #495057;
+            color: #fff;
+        }
+        .btn-dark-mode {
+            background-color: #495057;
+            color: #fff;
+            border: 1px solid #495057;
+        }
+        .btn-dark-mode:hover {
+            background-color: #6c757d;
+            color: #fff;
+        }
+        .btn-light-mode {
+            background-color: #f8f9fa;
+            color: #212529;
+            border: 1px solid #ced4da;
+        }
+        .btn-light-mode:hover {
+            background-color: #e2e6ea;
+            color: #212529;
+        }
+    </style>
+</head>
+<body class="light-mode">
+    <nav class="navbar navbar-expand-lg navbar-light navbar-light-mode">
+        <a class="navbar-brand" href="{{ url_for('index') }}">Key Management</a>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('index') }}">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-toggle="modal" data-target="#addKeyModal">Add Key</a>
+                </li>
+            </ul>
+        </div>
+        <button id="toggle-theme" class="btn btn-secondary ml-auto">Toggle Dark Mode</button>
+    </nav>
+    <div class="container mt-4">
+        {% block content %}{% endblock %}
+    </div>
+
+    <!-- Add Key Modal -->
+    <div class="modal fade" id="addKeyModal" tabindex="-1" aria-labelledby="addKeyModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content light-mode">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addKeyModalLabel">Add New Key</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form action="{{ url_for('add_key') }}" method="post">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="key">Key</label>
+                            <input type="text" class="form-control light-mode" id="key" name="key" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="user">User (optional)</label>
+                            <input type="text" class="form-control light-mode" id="user" name="user">
+                        </div>
+                        <div class="form-group">
+                            <label for="duration">Duration (days)</label>
+                            <input type="number" class="form-control light-mode" id="duration" name="duration" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="hwid">HWID (optional)</label>
+                            <input type="text" class="form-control light-mode" id="hwid" name="hwid">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary btn-light-mode" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary btn-light-mode">Add Key</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        document.getElementById('toggle-theme').addEventListener('click', function() {
+            document.body.classList.toggle('dark-mode');
+            document.body.classList.toggle('light-mode');
+            document.querySelector('.navbar').classList.toggle('navbar-dark-mode');
+            document.querySelector('.navbar').classList.toggle('navbar-light-mode');
+            document.querySelectorAll('.navbar-brand, .nav-link').forEach(link => {
+                link.classList.toggle('text-light');
+                link.classList.toggle('text-dark');
+            });
+            document.querySelectorAll('.table').forEach(table => {
+                table.classList.toggle('table-dark-mode');
+                table.classList.toggle('table-light-mode');
+            });
+            document.querySelectorAll('.modal-content').forEach(modal => {
+                modal.classList.toggle('dark-mode');
+                modal.classList.toggle('light-mode');
+            });
+            document.querySelectorAll('.form-control').forEach(input => {
+                input.classList.toggle('dark-mode');
+                input.classList.toggle('light-mode');
+            });
+            document.querySelectorAll('.btn').forEach(button => {
+                button.classList.toggle('btn-dark-mode');
+                button.classList.toggle('btn-light-mode');
+            });
+
+            // Save the current theme to local storage
+            if (document.body.classList.contains('dark-mode')) {
+                localStorage.setItem('theme', 'dark');
+            } else {
+                localStorage.setItem('theme', 'light');
+            }
+        });
+
+        // Load the saved theme from local storage
+        if (localStorage.getItem('theme') === 'dark') {
+            document.body.classList.add('dark-mode');
+            document.body.classList.remove('light-mode');
+            document.querySelector('.navbar').classList.add('navbar-dark-mode');
+            document.querySelector('.navbar').classList.remove('navbar-light-mode');
+            document.querySelectorAll('.navbar-brand, .nav-link').forEach(link => {
+                link.classList.add('text-light');
+                link.classList.remove('text-dark');
+            });
+            document.querySelectorAll('.table').forEach(table => {
+                table.classList.add('table-dark-mode');
+                table.classList.remove('table-light-mode');
+            });
+            document.querySelectorAll('.modal-content').forEach(modal => {
+                modal.classList.add('dark-mode');
+                modal.classList.remove('light-mode');
+            });
+            document.querySelectorAll('.form-control').forEach(input => {
+                input.classList.add('dark-mode');
+                input.classList.remove('light-mode');
+            });
+            document.querySelectorAll('.btn').forEach(button => {
+                button.classList.add('btn-dark-mode');
+                button.classList.remove('btn-light-mode');
+            });
+        }
+    </script>
+</body>
+</html>
