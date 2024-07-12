@@ -70,7 +70,7 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE.md) fi
 ## 🌟 Acknowledgments
 
 - Thanks to the Discord.py and PyMongo communities for their incredible libraries.
-- Special credits to [lunar](#) for inspiration.
+- Special credits to [lunar](#) for creating this masterpiece (me) lol.
 
 ## 📫 Contact
 
