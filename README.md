@@ -1,6 +1,6 @@
 # 🗝️ Python Key Generation & Redemption System
 
-Welcome to the Python Key Generation & Redemption System! This robust system allows for seamless generation and redemption of keys, perfect for integrating with standalone programs and Discord bots.
+Welcome to the Python Key Generation & Redemption System! This robust system allows for seamless generation and redemption of keys, making it ideal for integrating with standalone programs and Discord bots. It also includes an admin panel for managing roles and user access.
 
 ## 🚀 Key Features
 
@@ -10,6 +10,7 @@ Welcome to the Python Key Generation & Redemption System! This robust system all
 - **🖥️ User-Friendly Interface:** Simplify key management with customizable options.
 - **🔧 Extensibility:** Add features effortlessly to meet unique needs.
 - **⚙️ Reliability:** Enjoy stable operation even under heavy usage.
+- **🔨 Admin Panel Integration:** Manage user roles, whitelist users, and reset HWIDs directly from Discord.
 
 ## 📜 How to Use
 
@@ -28,6 +29,20 @@ Welcome to the Python Key Generation & Redemption System! This robust system all
 To install the required packages, run:
 
     pip install discord pymongo colorama
+
+## 🔧 Admin Panel Commands
+
+The Python Key Generation & Redemption System includes several commands for managing keys and user roles through Discord:
+
+- **/gen_key**: Generate a new license key for a user.
+- **/whitelist**: Whitelist a user by generating a key.
+- **/redeem**: Redeem a license key.
+- **/check_key**: Check and retrieve your license key.
+- **/delete_key**: Unwhitelist a user by deleting their key.
+- **/give-role**: Assign a role to a user.
+- **/sync**: Sync command tree (Owner only).
+- **/resethwid**: Reset a user's HWID (Buyer role required).
+- **/force_resethwid**: Force reset a user's HWID without cooldown (Admin only).
 
 ## 📄 License
 
